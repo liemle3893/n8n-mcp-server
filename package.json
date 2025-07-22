@@ -12,7 +12,11 @@
     "test": "node --experimental-vm-modules run-tests.js",
     "test:watch": "node --experimental-vm-modules run-tests.js --watch",
     "test:coverage": "node --experimental-vm-modules run-tests.js --coverage",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "build:dxt": "./build-dxt.sh",
+    "release:patch": "npm version patch && git push && git push --tags",
+    "release:minor": "npm version minor && git push && git push --tags",
+    "release:major": "npm version major && git push && git push --tags"
   },
   "bin": {
     "n8n-mcp-server": "build/index.js"

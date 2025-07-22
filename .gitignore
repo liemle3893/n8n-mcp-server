@@ -64,3 +64,4 @@ mcp-config.json
 *.dxt
 
 .claude
+.serena
