@@ -30,6 +30,9 @@
   ],
   "author": "liemle3893",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/liemle3893/n8n-mcp-server.git"
