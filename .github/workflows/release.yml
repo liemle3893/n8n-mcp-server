@@ -11,6 +11,11 @@ on:
         required: true
         default: 'v0.1.8'
 
+permissions:
+  contents: write    # Create releases and push tags
+  packages: write    # Publish packages  
+  actions: read      # Read artifacts
+
 jobs:
   build-and-release:
     name: Build DXT Packages
@@ -63,7 +68,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          # Don't specify architecture for fallback
           cache: 'npm'
+          
+      - name: Alternative Node.js for persistent ARM64 issues
+        if: failure() && matrix.arch == 'arm64'
+        run: |
+          # Use Node.js from system package manager as last resort
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+          elif [[ "${{ matrix.os }}" == "macos-"* ]]; then
+            # macOS ARM64 systems should have working Node.js
+            brew install node@20 || true
+          fi
+          node --version || echo "Node.js still not working"
+          npm --version || echo "npm still not working"
 
       - name: Install root dependencies
         run: npm ci
@@ -189,6 +209,7 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
+          scope: '@liemle3893'
           cache: 'npm'
 
       - name: Install dependencies

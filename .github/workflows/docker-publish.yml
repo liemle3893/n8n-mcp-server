@@ -1,9 +1,7 @@
 name: Build & Publish Docker image
 
-# ➊ Triggers – push to main OR new GitHub Release
+# ➊ Triggers – only on new GitHub Release (no more push to main)
 on:
-  push:
-    branches: [main]
   release:
     types: [published]
 
