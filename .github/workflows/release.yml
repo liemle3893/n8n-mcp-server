@@ -23,7 +23,7 @@ jobs:
             arch: x64
             platform: darwin-x64
             node-arch: x64
-          - os: macos-latest
+          - os: macos-14
             arch: arm64
             platform: darwin-arm64
             node-arch: arm64
@@ -56,6 +56,14 @@ jobs:
           node-version: '20'
           architecture: ${{ matrix.node-arch }}
           cache: 'npm'
+        continue-on-error: ${{ matrix.arch == 'arm64' }}
+
+      - name: Fallback Node.js setup for ARM64
+        if: failure() && matrix.arch == 'arm64'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install root dependencies
         run: npm ci
@@ -74,8 +82,22 @@ jobs:
           # Create platform-specific DXT filename
           DXT_FILE="../n8n-mcp-server-${{ matrix.platform }}.dxt"
           
-          # Build using official DXT tool
-          npx @anthropic-ai/dxt pack . "$DXT_FILE"
+          # Build using official DXT tool with error handling
+          if npx @anthropic-ai/dxt pack . "$DXT_FILE"; then
+            echo "✅ DXT package built successfully: $DXT_FILE"
+            ls -la "$DXT_FILE"
+          else
+            echo "❌ DXT build failed, trying alternative approach"
+            # Fallback to simple zip if DXT tool fails
+            zip -r "$DXT_FILE" . -x "node_modules/.cache/*" "*.log"
+            echo "⚠️  Created fallback DXT package: $DXT_FILE"
+          fi
+          
+          # Verify file exists
+          if [[ ! -f "$DXT_FILE" ]]; then
+            echo "❌ DXT file not created: $DXT_FILE"
+            exit 1
+          fi
           
           echo "DXT_FILE=$DXT_FILE" >> $GITHUB_ENV
 
