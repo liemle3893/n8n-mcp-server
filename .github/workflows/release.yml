@@ -49,7 +49,7 @@ jobs:
           - os: windows-latest
             arch: arm64
             platform: win32-arm64
-            node-arch: arm64
+            node-arch: x64  # Use x64 Node.js for cross-compilation to ARM64
 
     steps:
       - name: Checkout code
@@ -79,6 +79,8 @@ jobs:
           # Create platform-specific DXT filename
           DXT_FILE="../n8n-mcp-server-${{ matrix.platform }}.dxt"
           
+          echo "🔨 Building DXT package for ${{ matrix.platform }} (using ${{ matrix.node-arch }} Node.js)"
+          
           # Build using official DXT tool with error handling
           if npx @anthropic-ai/dxt pack . "$DXT_FILE"; then
             echo "✅ DXT package built successfully: $DXT_FILE"
@@ -96,6 +98,7 @@ jobs:
             exit 1
           fi
           
+          echo "✅ Final DXT package ready: $DXT_FILE"
           echo "DXT_FILE=$DXT_FILE" >> $GITHUB_ENV
 
       - name: Upload DXT artifacts
