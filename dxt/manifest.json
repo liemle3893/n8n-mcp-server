@@ -2,7 +2,7 @@
   "dxt_version": "0.1",
   "name": "n8n-mcp-server",
   "display_name": "n8n-mcp-server",
-  "version": "0.1.8",
+  "version": "0.1.12",
   "description": "Model Context Protocol server for n8n workflow automation, enabling AI assistants to create, manage, and execute workflows",
   "long_description": "Model Context Protocol server for n8n workflow automation, enabling AI assistants to create, manage, and execute workflows\n\nFeatures:\n- Complete workflow lifecycle management\n- Execution monitoring and control\n- Webhook-based workflow triggers\n- Health monitoring and diagnostics\n- Secure credential handling\n- Resource browsing capabilities\n\nRequires n8n instance with API access enabled.",
   "author": {
@@ -197,8 +197,7 @@
     "client": ">=0.10.0",
     "platforms": [
       "darwin",
-      "win32",
-      "linux"
+      "win32"
     ],
     "runtime": {
       "node": ">=20.0.0"

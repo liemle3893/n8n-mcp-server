@@ -7,6 +7,16 @@ set -e
 
 echo "🔄 Syncing build artifacts to DXT folder..."
 
+# Get version from git tags or package.json
+GIT_TAG=$(git describe --tags --exact-match 2>/dev/null || echo "")
+if [ -n "$GIT_TAG" ]; then
+    VERSION=${GIT_TAG#v}  # Remove 'v' prefix if present
+    echo "📌 Using git tag version: $VERSION"
+else
+    VERSION=$(jq -r '.version' package.json)
+    echo "📦 Using package.json version: $VERSION"
+fi
+
 # Check if build directory exists
 if [ ! -d "build" ]; then
     echo "❌ Build directory not found. Run 'npm run build' first."
@@ -33,11 +43,11 @@ echo "📋 Updating dxt/manifest.json from root manifest.json"
 # Use jq to convert root manifest to DXT format if available, otherwise just copy
 if command -v jq &> /dev/null; then
     # Convert root manifest to DXT format
-    jq '{
+    jq --arg version "$VERSION" '{
         dxt_version: "0.1",
         name,
         display_name: .name,
-        version,
+        version: $version,
         description,
         long_description: (.description + "\n\nFeatures:\n- Complete workflow lifecycle management\n- Execution monitoring and control\n- Webhook-based workflow triggers\n- Health monitoring and diagnostics\n- Secure credential handling\n- Resource browsing capabilities\n\nRequires n8n instance with API access enabled."),
         author: {
@@ -124,7 +134,7 @@ if command -v jq &> /dev/null; then
         },
         compatibility: {
             client: ">=0.10.0",
-            platforms: ["darwin", "win32", "linux"], 
+            platforms: ["darwin", "win32"], 
             runtime: {
                 node: ">=20.0.0"
             }
@@ -140,10 +150,9 @@ fi
 # Update dxt/package.json if needed
 echo "📄 Updating dxt/package.json"
 if [ -f "dxt/package.json" ]; then
-    # Update version to match root package.json if jq is available
+    # Update version to match detected version if jq is available
     if command -v jq &> /dev/null; then
-        ROOT_VERSION=$(jq -r '.version' package.json)
-        jq --arg version "$ROOT_VERSION" '.version = $version' dxt/package.json > dxt/package.json.tmp
+        jq --arg version "$VERSION" '.version = $version' dxt/package.json > dxt/package.json.tmp
         mv dxt/package.json.tmp dxt/package.json
     fi
 fi

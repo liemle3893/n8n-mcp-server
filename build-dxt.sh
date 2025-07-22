@@ -27,6 +27,18 @@ if [ ! -d "$DXT_SOURCE_DIR" ]; then
     exit 1
 fi
 
+# Get version from git tags or package.json
+echo -e "${YELLOW}🔍 Detecting version...${NC}"
+GIT_TAG=$(git describe --tags --exact-match 2>/dev/null || echo "")
+if [ -n "$GIT_TAG" ]; then
+    VERSION=${GIT_TAG#v}  # Remove 'v' prefix if present
+    echo -e "${BLUE}📌 Using git tag version: $VERSION${NC}"
+else
+    VERSION=$(jq -r '.version' package.json)
+    echo -e "${BLUE}📦 Using package.json version: $VERSION${NC}"
+    echo -e "${YELLOW}⚠️  No git tag found, using package.json version${NC}"
+fi
+
 # Sync build artifacts to DXT first
 echo -e "${YELLOW}🔄 Syncing build artifacts to DXT...${NC}"
 if [ -f "sync-to-dxt.sh" ]; then
@@ -34,6 +46,14 @@ if [ -f "sync-to-dxt.sh" ]; then
 else
     echo -e "${YELLOW}⚠️  sync-to-dxt.sh not found, using existing DXT files${NC}"
 fi
+
+# Update manifest version to match detected version
+echo -e "${YELLOW}📝 Updating manifest version to $VERSION...${NC}"
+jq --arg version "$VERSION" '.version = $version' "$DXT_SOURCE_DIR/manifest.json" > tmp.json && mv tmp.json "$DXT_SOURCE_DIR/manifest.json"
+
+# Update DXT package.json version to match
+echo -e "${YELLOW}📝 Updating DXT package.json version to $VERSION...${NC}"
+jq --arg version "$VERSION" '.version = $version' "$DXT_SOURCE_DIR/package.json" > tmp.json && mv tmp.json "$DXT_SOURCE_DIR/package.json"
 
 # Check required files
 echo -e "${YELLOW}📋 Validating DXT structure...${NC}"
