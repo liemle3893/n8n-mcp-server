@@ -41,7 +41,9 @@ npm link
 Download the appropriate `.dxt` file for your platform from the [latest release](https://github.com/liemle3893/n8n-mcp-server/releases):
 
 - **macOS Intel**: `n8n-mcp-server-darwin-x64.dxt`
-- **macOS Apple Silicon**: `n8n-mcp-server-darwin-arm64.dxt`  
+- **macOS Apple Silicon**: `n8n-mcp-server-darwin-arm64.dxt`
+- **Linux x64**: `n8n-mcp-server-linux-x64.dxt`
+- **Linux ARM64**: `n8n-mcp-server-linux-arm64.dxt`  
 - **Windows x64**: `n8n-mcp-server-win32-x64.dxt`
 - **Windows ARM64**: `n8n-mcp-server-win32-arm64.dxt`
 
