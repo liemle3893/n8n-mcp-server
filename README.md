@@ -4,22 +4,19 @@ A Model Context Protocol (MCP) server for n8n workflow automation.
 
 ## Installation
 
-### From GitHub Package Registry
+### From npm Registry
 
 ```bash
-# Configure npm to use GitHub Package Registry for this scope
-echo "@liemle3893:registry=https://npm.pkg.github.com" >> ~/.npmrc
-
-# For public packages, you may need to authenticate with GitHub
-# Create a GitHub Personal Access Token with 'read:packages' scope
-# Then configure authentication:
-echo "//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN" >> ~/.npmrc
-
-# Install the package
+# Install directly from npm (recommended)
 npm install -g @liemle3893/n8n-mcp-server
 ```
 
-**Note**: If the package is public, authentication may not be required. Try without the auth token first.
+The package is published as a public scoped package on npm, so no additional configuration is needed.
+
+After installation, you can run the server:
+```bash
+n8n-mcp-server
+```
 
 ### From Source
 
