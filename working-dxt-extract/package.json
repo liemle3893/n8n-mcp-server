@@ -1,0 +1,21 @@
+{
+  "name": "n8n-mcp-server-dxt",
+  "version": "0.1.8",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["n8n", "mcp", "dxt", "workflow", "automation"],
+  "author": "Leonard Sellem <contact@sellem.me>",
+  "license": "MIT",
+  "description": "Desktop Extension for n8n workflow automation via MCP",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.16.0",
+    "axios": "^1.10.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
