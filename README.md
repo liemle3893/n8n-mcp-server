@@ -2,6 +2,63 @@
 
 A Model Context Protocol (MCP) server for n8n workflow automation.
 
+## Installation
+
+### From GitHub Package Registry
+
+```bash
+# Configure npm to use GitHub Package Registry for this scope
+echo "@liemle3893:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+# For public packages, you may need to authenticate with GitHub
+# Create a GitHub Personal Access Token with 'read:packages' scope
+# Then configure authentication:
+echo "//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN" >> ~/.npmrc
+
+# Install the package
+npm install -g @liemle3893/n8n-mcp-server
+```
+
+**Note**: If the package is public, authentication may not be required. Try without the auth token first.
+
+### From Source
+
+```bash
+# Clone the repository
+git clone https://github.com/liemle3893/n8n-mcp-server.git
+cd n8n-mcp-server
+
+# Install dependencies and build
+npm install
+npm run build
+
+# Install globally (optional)
+npm link
+```
+
+### Claude Desktop Extension (DXT)
+
+Download the appropriate `.dxt` file for your platform from the [latest release](https://github.com/liemle3893/n8n-mcp-server/releases):
+
+- **macOS Intel**: `n8n-mcp-server-darwin-x64.dxt`
+- **macOS Apple Silicon**: `n8n-mcp-server-darwin-arm64.dxt`  
+- **Windows x64**: `n8n-mcp-server-win32-x64.dxt`
+- **Windows ARM64**: `n8n-mcp-server-win32-arm64.dxt`
+
+Then drag the `.dxt` file into Claude Desktop.
+
+## Configuration
+
+### For npm package usage:
+Create a `.env` file or set environment variables:
+```bash
+N8N_BASE_URL=http://localhost:5678
+N8N_API_KEY=your_api_key_here
+```
+
+### For Claude Desktop DXT:
+Configure the extension settings in Claude Desktop with your n8n instance URL and API key.
+
 ## Build
 
 ```bash
